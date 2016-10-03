@@ -127,6 +127,29 @@ public final class QueryUtils {
                 String title = newsObject.getString("webTitle");
                 String webUrl = newsObject.getString("webUrl");
                 String author = "N/A";
+                String[] authorsArray = new String[]{};
+                List<String> authorsList = new ArrayList<>();
+
+                JSONArray tagsArray = newsObject.getJSONArray("tags");
+
+                for (int j = 0; j < tagsArray.length(); j++) {
+                    JSONObject tagsObject = tagsArray.getJSONObject(j);
+                    String firstName = tagsObject.optString("firstName");
+                    String lastName = tagsObject.optString("lastName");
+                    String authorName;
+                    if (TextUtils.isEmpty(firstName)) {
+                        authorName = lastName;
+                    } else {
+                        authorName = firstName + " " + lastName;
+                    }
+                    authorsList.add(authorName);
+                }
+
+                if (authorsList.size() == 0) {
+                    author = "N/A";
+                } else {
+                    author = TextUtils.join(", ", authorsList);
+                }
 
                 News news = new News(title, author, webUrl);
                 newsList.add(news);

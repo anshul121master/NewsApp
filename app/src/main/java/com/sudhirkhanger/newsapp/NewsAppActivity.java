@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.sudhirkhanger.newsapp.databinding.ActivityMainBinding;
 
@@ -49,8 +51,13 @@ public class NewsAppActivity extends AppCompatActivity
 
                 Uri newsUri = Uri.parse(currentNews.getWebUrl());
                 Log.d(LOG_TAG, newsUri.toString());
-                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, newsUri);
-                startActivity(websiteIntent);
+
+                if (currentNews.getWebUrl() == null || TextUtils.isEmpty(currentNews.getWebUrl())) {
+                    Toast.makeText(NewsAppActivity.this, NewsAppActivity.this.getResources().getString(R.string.no_link_found), Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent websiteIntent = new Intent(Intent.ACTION_VIEW, newsUri);
+                    startActivity(websiteIntent);
+                }
             }
         });
 
